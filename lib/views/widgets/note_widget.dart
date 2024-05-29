@@ -23,6 +23,7 @@ class _NoteWidgetState extends State<NoteWidget> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: widget.onTapp,
       leading: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

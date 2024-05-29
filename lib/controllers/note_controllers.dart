@@ -5,8 +5,15 @@ import 'package:homework/views/widgets/note_widget.dart';
 class NoteControllers {
   List<NoteModels> list = [
     NoteModels(
-        title: 'maktabga borish', content: '2025-02-12', data: '2025-02-12'),
-    NoteModels(title: 'uxlash', content: '2024-05-06', data: '2024-05-06'),
+        title: 'What is Lorem Ipsum?',
+        content:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.',
+        data: '2025-02-12'),
+    NoteModels(
+        title: 'Where does it come from?',
+        content:
+            'Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in',
+        data: '2024-05-06'),
   ];
 
   void add(String title, String content, String data) {

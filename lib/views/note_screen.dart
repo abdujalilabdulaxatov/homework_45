@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:homework/controllers/note_controllers.dart';
+import 'package:homework/views/content.dart';
 import 'package:homework/views/drawer.dart';
+import 'package:homework/views/widgets/add_note.dart';
 import 'package:homework/views/widgets/note_widget.dart';
 
 class Note extends StatefulWidget {
@@ -16,11 +18,34 @@ class _NoteState extends State<Note> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Map<String, dynamic>? data = await showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (ctx) {
+              return AddNote();
+            },
+          );
+
+          if (data?['title'] != null) {
+            if (data!['date'] != '') {
+              noteControllers.add(data['title'], data['content'], data['date']);
+            } else {
+              noteControllers.add(data['title'], data['content'],
+                  DateTime.now().toString().split(' ')[0]);
+            }
+          }
+
+          setState(() {});
+        },
+        child: Icon(Icons.add),
+      ),
       drawer: Drawers(),
       appBar: AppBar(
         backgroundColor: Colors.amber,
         title: Text(
-          'Note',
+          'Notes',
           style: GoogleFonts.poppins(
               textStyle: TextStyle(fontWeight: FontWeight.w600)),
         ),
@@ -29,17 +54,40 @@ class _NoteState extends State<Note> {
           itemCount: noteControllers.list.length,
           itemBuilder: (ctx, index) {
             return NoteWidget(
-                id: 0,
+                id: index,
                 noteModels: noteControllers.list[index],
                 onDelete: () {
                   noteControllers.delete(index);
                   setState(() {});
                 },
-                onEdit: () {
-                  noteControllers.edit('title', 'content', 'data', 1);
+                onEdit: () async {
+                  Map<String, dynamic>? data = await showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (ctx) {
+                      return AddNote();
+                    },
+                  );
+                  if (data?['date'] == '') {
+                    print(data?['date'].runtimeType);
+                    noteControllers.edit(data!['title'], data!['content'],
+                        DateTime.now().toString().split(' ')[0], index);
+                  } else {
+                    noteControllers.edit(
+                        data!['title'], data['content'], data['date'], index);
+                  }
+
                   setState(() {});
                 },
-                onTapp: () {});
+                onTapp: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => Content(
+                              title: noteControllers.list[index].title,
+                              content: noteControllers.list[index].content,
+                              date: noteControllers.list[index].data)));
+                });
           }),
     );
   }
